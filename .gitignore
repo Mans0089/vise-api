@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+
+# Editor
+.vscode/
+.idea/
+
+# Docker
+*.log
+*.pid
+
+# Byte-compiled
+*.pyo
+*.pyd
+
+# macOS
+.DS_Store
