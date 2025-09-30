@@ -2,7 +2,7 @@
 from datetime import datetime
 from typing import Tuple
 
-FORBIDDEN_COUNTRIES = {c.lower(): c for c in ["China","Vietnam","India","Irán","Iran"]}
+FORBIDDEN_COUNTRIES = {c.lower(): c for c in ["China","Vietnam","India","Irán","Iran", "Corea", "Rusia"]}
 
 def _weekday_name(d: datetime) -> str:
     names = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
