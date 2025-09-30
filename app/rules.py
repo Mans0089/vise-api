@@ -61,41 +61,41 @@ def compute_benefit(client: dict, amount: float, purchase_dt: datetime, purchase
     candidates = []
 
     if ctype == "Classic":
-        return 0.0, "Sin beneficio"
+        return 0.0, "Sin beneficios"
 
     if ctype == "Gold":
         if weekday in (0,1,2) and amount > 100:
-            candidates.append((0.15, f"{dayname} - Descuento 15%"))
+            candidates.append((0.15, f"{dayname} - Descuento de 15%"))
 
     if ctype == "Platinum":
         if weekday in (0,1,2) and amount > 100:
-            candidates.append((0.20, f"{dayname} - Descuento 20%"))
+            candidates.append((0.20, f"{dayname} - Descuento de 20%"))
         if weekday == 5 and amount > 200:
-            candidates.append((0.30, "Sábado - Descuento 30%"))
+            candidates.append((0.30, "Sábado - Descuento de 30%"))
         if exterior:
-            candidates.append((0.05, "Exterior - Descuento 5%"))
+            candidates.append((0.05, "Exterior - Descuento de 5%"))
 
     if ctype == "Black":
         if weekday in (0,1,2) and amount > 100:
-            candidates.append((0.25, f"{dayname} - Descuento 25%"))
+            candidates.append((0.25, f"{dayname} - Descuento de 25%"))
         if weekday == 5 and amount > 200:
-            candidates.append((0.35, "Sábado - Descuento 35%"))
+            candidates.append((0.35, "Sábado - Descuento de 35%"))
         if exterior:
-            candidates.append((0.05, "Exterior - Descuento 5%"))
+            candidates.append((0.05, "Exterior - Descuento de 5%"))
 
     if ctype == "White":
         if is_weekday and amount > 100:
-            candidates.append((0.25, f"{dayname} - Descuento 25%"))
+            candidates.append((0.25, f"{dayname} - Descuento de 25%"))
         if is_weekend and amount > 200:
             # Sábado o Domingo
-            label = "Sábado/Domingo - Descuento 35%"
+            label = "Sábado/Domingo - Descuento de 35%"
             if weekday == 5:
-                label = "Sábado - Descuento 35%"
+                label = "Sábado - Descuento de 35%"
             elif weekday == 6:
-                label = "Domingo - Descuento 35%"
+                label = "Domingo - Descuento de 35%"
             candidates.append((0.35, label))
         if exterior:
-            candidates.append((0.05, "Exterior - Descuento 5%"))
+            candidates.append((0.05, "Exterior - Descuento de 5%"))
 
     if not candidates:
         return 0.0, "Sin beneficio"
