@@ -13,30 +13,30 @@ def check_registration_restrictions(card_type: str, monthly_income: float, vise_
     ctry = (country or "").strip().lower()
 
     if ctype == "Classic":
-        return True, "Cliente apto para tarjeta Classic"
+        return True, "Usuario apto para tarjeta Classic"
 
     if ctype == "Gold":
         if monthly_income < 500:
-            return False, "El cliente no cumple con el ingreso mínimo de 500 USD requerido para Gold"
-        return True, "Cliente apto para tarjeta Gold"
+            return False, "El usuario no cumple con el ingreso mínimo de 500 USD requerido para Gold"
+        return True, "Usuario apto para tarjeta Gold"
 
     if ctype == "Platinum":
         if monthly_income < 1000:
-            return False, "El cliente no cumple con el ingreso mínimo de 1000 USD requerido para Platinum"
+            return False, "El usuario no cumple con el ingreso mínimo de 1000 USD requerido para Platinum"
         if not vise_club:
-            return False, "El cliente no cumple con la suscripción VISE CLUB requerida para Platinum"
-        return True, "Cliente apto para tarjeta Platinum"
+            return False, "El usuario no cumple con la suscripción VISE CLUB requerida para Platinum"
+        return True, "Usuario apto para tarjeta Platinum"
 
     if ctype == "Black" or ctype == "White":
         if monthly_income < 2000:
-            return False, f"El cliente no cumple con el ingreso mínimo de 2000 USD requerido para {ctype}"
+            return False, f"El usuario no cumple con el ingreso mínimo de 2000 USD requerido para {ctype}"
         if not vise_club:
-            return False, f"El cliente no cumple con la suscripción VISE CLUB requerida para {ctype}"
+            return False, f"El usuario no cumple con la suscripción VISE CLUB requerida para {ctype}"
         # Restricción por país de residencia
         if ctry in FORBIDDEN_COUNTRIES:
             full = FORBIDDEN_COUNTRIES[ctry]
-            return False, f"No se permite registrar clientes que residan en {full} para {ctype}"
-        return True, f"Cliente apto para tarjeta {ctype}"
+            return False, f"No se permite registrar usuarios que residan en {full} para {ctype}"
+        return True, f"Usuario apto para tarjeta {ctype}"
 
     return False, "Tipo de tarjeta inválido"
 
@@ -46,7 +46,7 @@ def check_purchase_restrictions(client: dict, purchase_country: str) -> Tuple[bo
     pc = (purchase_country or "").strip().lower()
     if ctype in ("Black", "White") and pc in FORBIDDEN_COUNTRIES:
         full = FORBIDDEN_COUNTRIES[pc]
-        return False, f"El cliente con tarjeta {ctype} no puede realizar compras desde {full}"
+        return False, f"El usuario con tarjeta {ctype} no puede realizar compras desde {full}"
     return True, ""
 
 def compute_benefit(client: dict, amount: float, purchase_dt: datetime, purchase_country: str) -> Tuple[float, str]:
