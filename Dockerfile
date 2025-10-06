@@ -12,8 +12,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app ./app
 
 # Exponer puerto (configurable por env PORT, por defecto 3000)
-ENV PORT=3000
-EXPOSE 3000
+ENV PORT=443
+EXPOSE 443
 
 # Comando de arranque
 CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT}
