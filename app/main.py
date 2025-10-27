@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from datetime import datetime
 
-from app.schemas import ClientIn, ClientOut, ErrorOut, PurchaseIn, PurchaseApproved, PurchaseRejected
+from app.schemas import ClientIn, ErrorOut, PurchaseIn, PurchaseRejected
 from app.store import store
 from app.rules import check_registration_restrictions, check_purchase_restrictions, compute_benefit
 
