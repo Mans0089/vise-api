@@ -14,10 +14,6 @@ on:
       AZURE_WEBAPP_NAME:
         description: 'Nombre del App Service creado en Azure'
         required: true
-      PORT:
-        description: 'Port of the application'
-        default: '80'
-        required: true
 
 env:
   IMAGE_URL: ${{ secrets.ACR_NAME_MANUEL }}.azurecr.io/${{ github.event.inputs.IMAGE_REPOSITORY }}:${{ github.event.inputs.IMAGE_TAG }}
