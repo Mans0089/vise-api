@@ -76,5 +76,5 @@ jobs:
 
       - name: Test API
         run: >
-          hurl --variable host=https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net:${{ github.event.inputs.PORT }}
+          hurl --variable host=https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net \ 
           --connect-timeout 20s --error-format long --verbose --test session.hurl
