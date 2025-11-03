@@ -76,9 +76,10 @@ jobs:
 
       - name: Test API
         run: |
-          # Detectar si debe usarse HTTP o HTTPS
+          # Si Azure está usando el puerto 80 interno, el front-end suele forzar HTTPS.
+          # Para evitar redirecciones innecesarias, usamos HTTPS sin puerto cuando PORT=80.
           if [ "${{ github.event.inputs.PORT }}" = "80" ]; then
-            HOST="http://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net:80"
+            HOST="https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net"
           else
             HOST="https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net:${{ github.event.inputs.PORT }}"
           fi
