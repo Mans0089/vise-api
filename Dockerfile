@@ -10,9 +10,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiar código
 COPY app ./app
 
-# Exponer puerto 80 (Azure usará este)
 ENV PORT=80
 EXPOSE 80
 
-# Usar gunicorn con el worker de uvicorn (mejor para producción)
-CMD ["gunicorn", "main:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:80", "--timeout", "600"]
+# Comando de arranque
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]

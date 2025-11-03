@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from datetime import datetime
@@ -8,6 +9,7 @@ from app.rules import check_registration_restrictions, check_purchase_restrictio
 
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from app.telemetry import configure_app
 from app.otel_setup import setup_tracer
 
 # 🔹 Configura el tracer (con el nombre del servicio)
@@ -15,6 +17,7 @@ tracer = setup_tracer("vise-api")
 
 # 🔹 Inicializa FastAPI e instrumenta OpenTelemetry
 app = FastAPI(title="VISE API", version="0.1.0")
+
 FastAPIInstrumentor.instrument_app(app)
 RequestsInstrumentor().instrument()
 
@@ -28,6 +31,8 @@ async def add_tracing(request: Request, call_next):
         response = await call_next(request)
         span.set_attribute("http.status_code", response.status_code)
         return response
+    
+configure_app(app)
 
 
 # 🔹 Endpoint de health check
