@@ -15,4 +15,4 @@ ENV PORT=80
 EXPOSE 80
 
 # Usar gunicorn con el worker de uvicorn (mejor para producción)
-CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "app.main:app", "--bind", "0.0.0.0:80"]
+CMD ["gunicorn", "main:app", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:80", "--timeout", "600"]
