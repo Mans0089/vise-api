@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from datetime import datetime
@@ -8,9 +7,11 @@ from app.rules import check_registration_restrictions, check_purchase_restrictio
 
 app = FastAPI(title="VISE API", version="0.1.0")
 
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
 
 @app.post("/client", responses={400: {"model": ErrorOut}}, response_model_exclude_none=True)
 def register_client(payload: ClientIn):
@@ -28,18 +29,17 @@ def register_client(payload: ClientIn):
     }
     return out
 
+
 @app.post("/purchase", responses={400: {"model": PurchaseRejected}}, response_model_exclude_none=True)
 def purchase(payload: PurchaseIn):
     client = store.get_client(payload.clientId)
     if not client:
         raise HTTPException(status_code=404, detail="Cliente no encontrado")
 
-    # Restricciones de compra
     ok, err = check_purchase_restrictions(client, payload.purchaseCountry)
     if not ok:
         return JSONResponse(status_code=400, content={"status": "Rejected", "error": err})
 
-    # Parse de fecha
     try:
         dt = datetime.fromisoformat(payload.purchaseDate.replace("Z", "+00:00"))
     except Exception:
@@ -59,4 +59,3 @@ def purchase(payload: PurchaseIn):
             "benefit": label
         }
     }
-#Cambio
