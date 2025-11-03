@@ -75,6 +75,13 @@ jobs:
         uses: gacts/install-hurl@v1
 
       - name: Test API
-        run: >
-          hurl --variable host=https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net:${{ github.event.inputs.PORT }}
-          --connect-timeout 20s --error-format long --verbose --test session.hurl
+        run: |
+          # Detectar si debe usarse HTTP o HTTPS
+          if [ "${{ github.event.inputs.PORT }}" = "80" ]; then
+            HOST="http://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net:80"
+          else
+            HOST="https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net:${{ github.event.inputs.PORT }}"
+          fi
+
+          echo "🔍 Testing host: $HOST"
+          hurl --variable host=$HOST --connect-timeout 20s --error-format long --verbose --test session.hurl
