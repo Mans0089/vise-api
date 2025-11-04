@@ -14,9 +14,13 @@ on:
       AZURE_WEBAPP_NAME:
         description: 'Nombre del App Service creado en Azure'
         required: true
+      PORT:
+        description: 'Port of the application'
+        default: '80'
+        required: true
 
 env:
-  IMAGE_URL: ${{ secrets.ACR_NAME_MANUEL }}.azurecr.io/${{ github.event.inputs.IMAGE_REPOSITORY }}:${{ github.event.inputs.IMAGE_TAG }}
+  IMAGE_URL: ${{ secrets.ACR_NAME_JUAN }}.azurecr.io/${{ github.event.inputs.IMAGE_REPOSITORY }}:${{ github.event.inputs.IMAGE_TAG }}
 
 jobs:
   build-and-push-image:
@@ -30,9 +34,9 @@ jobs:
       - name: Docker Login
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ secrets.ACR_NAME_MANUEL }}.azurecr.io
-          username: ${{ secrets.ACR_NAME_MANUEL }}
-          password: ${{ secrets.ACR_PASSWORD_MANUEL }}
+          login-server: ${{ secrets.ACR_NAME_JUAN }}.azurecr.io
+          username: ${{ secrets.ACR_NAME_JUAN }}
+          password: ${{ secrets.ACR_PASSWORD_JUAN }}
 
       - name: Build and Push to ACR
         uses: docker/build-push-action@v6
@@ -51,7 +55,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ github.event.inputs.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_MANUEL }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_JUAN }}
           images: ${{ env.IMAGE_URL }}
 
   test-deploy:
@@ -72,9 +76,13 @@ jobs:
 
       - name: Test API
         run: |
-          hurl \
-            --variable host=https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net \
-            --connect-timeout 20s \
-            --error-format long \
-            --verbose \
-            --test session.hurl
+          # Si Azure está usando el puerto 80 interno, el front-end suele forzar HTTPS.
+          # Para evitar redirecciones innecesarias, usamos HTTPS sin puerto cuando PORT=80.
+          if [ "${{ github.event.inputs.PORT }}" = "80" ]; then
+            HOST="https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net"
+          else
+            HOST="https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net:${{ github.event.inputs.PORT }}"
+          fi
+
+          echo "🔍 Testing host: $HOST"
+          hurl --variable host=$HOST --connect-timeout 20s --error-format long --verbose --test session.hurl
