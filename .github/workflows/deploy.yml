@@ -20,7 +20,7 @@ on:
         required: true
 
 env:
-  IMAGE_URL: ${{ secrets.ACR_NAME_JUAN }}.azurecr.io/${{ github.event.inputs.IMAGE_REPOSITORY }}:${{ github.event.inputs.IMAGE_TAG }}
+  IMAGE_URL: ${{ secrets.ACR_NAME_MANUEL }}.azurecr.io/${{ github.event.inputs.IMAGE_REPOSITORY }}:${{ github.event.inputs.IMAGE_TAG }}
 
 jobs:
   build-and-push-image:
@@ -34,9 +34,9 @@ jobs:
       - name: Docker Login
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ secrets.ACR_NAME_JUAN }}.azurecr.io
-          username: ${{ secrets.ACR_NAME_JUAN }}
-          password: ${{ secrets.ACR_PASSWORD_JUAN }}
+          login-server: ${{ secrets.ACR_NAME_MANUEL }}.azurecr.io
+          username: ${{ secrets.ACR_NAME_MANUEL }}
+          password: ${{ secrets.ACR_PASSWORD_MANUEL }}
 
       - name: Build and Push to ACR
         uses: docker/build-push-action@v6
@@ -55,7 +55,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ github.event.inputs.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_JUAN }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_MANUEL }}
           images: ${{ env.IMAGE_URL }}
 
   test-deploy:
