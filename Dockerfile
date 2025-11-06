@@ -1,19 +1,13 @@
-
-# Imagen base liviana
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Instalar dependencias
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar código
 COPY app ./app
 
-# Exponer puerto (configurable por env PORT, por defecto 3000)
-ENV PORT=443
-EXPOSE 443
+ENV PORT=8000
+EXPOSE 8000
 
-# Comando de arranque
-CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT}
+CMD ["bash", "-c", "gunicorn app.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:${PORT} --timeout 600"]
