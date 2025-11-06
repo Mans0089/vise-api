@@ -4,7 +4,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor, ConsoleSpanExporter
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 
-
+#azure
 def setup_tracer(service_name: str):
     """Configura un tracer conectado directamente a Grafana Cloud."""
 
