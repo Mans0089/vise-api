@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       PORT:
-        description: 'The port of your application'
+        description: 'The port of your application (host)'
         required: true
         default: "3000"
 
@@ -25,9 +25,8 @@ jobs:
       - name: Run container
         run: |
           docker run -d \
-            -p ${{ github.event.inputs.PORT }}:${{ github.event.inputs.PORT }} \
+            -p ${{ github.event.inputs.PORT }}:80 \
             --name vise-api \
-            -e PORT=${{ github.event.inputs.PORT }} \
             vise-api:latest
           sleep 5
 
