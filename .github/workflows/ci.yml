@@ -1,11 +1,10 @@
-
 name: Build container and run VISE API testing
 
 on:
   workflow_dispatch:
     inputs:
       PORT:
-        description: 'The port of your application'
+        description: 'The port of your application (host)'
         required: true
         default: "3000"
 
@@ -25,14 +24,21 @@ jobs:
 
       - name: Run container
         run: |
-          docker run -d -p ${{ github.event.inputs.PORT }}:${{ github.event.inputs.PORT }} --name vise-api -e PORT=${{ github.event.inputs.PORT }} vise-api:latest
+          # Mapea puerto del host (3000) al 8000 del contenedor
+          docker run -d \
+            -p ${{ github.event.inputs.PORT }}:8000 \
+            --name vise-api \
+            vise-api:latest
           sleep 5
 
       - name: Setup hurl (API testing tool)
         uses: gacts/install-hurl@v1
 
       - name: Test API
-        run: hurl --variable host=http://localhost:${{ github.event.inputs.PORT }} --error-format long --test session.hurl
+        run: |
+          hurl --variable host=http://localhost:${{ github.event.inputs.PORT }} \
+               --error-format long \
+               --test session.hurl
 
       - name: Print logs if failed
         if: failure()
